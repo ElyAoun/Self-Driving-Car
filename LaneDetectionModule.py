@@ -105,6 +105,7 @@ def display_lines(frame, lines, line_color=(0, 255, 0), line_width=5):
     return line_image
 
 
+
 if __name__ == '__main__':
     tests = ['test.jpg', 'test2.jpg', 'test3.jpg', 'test4.jpg', 'test5.jpg', 'test6.jpeg', 'test7.jpeg', 'test8.jpeg',
              'test9.jpeg', 'test10.jpeg']

@@ -12,6 +12,7 @@ class CarModule:
         self.motor_left.moveForward(speed - angle)
         self.motor_right.moveForward(speed + angle)
         sleep(t)
-    def stopLR(self):
+    def stopLR(self,t=0):
         self.motor_left.stop()
         self.motor_right.stop()
+        sleep(t)
