@@ -6,7 +6,7 @@ class CarModule():
         self.motor_left=motor_left
         self.motor_right=motor_right
 
-    def moveLRForward(self,speed=50,angle=0,t):
+    def moveLRForward(self,speed=50,angle=0,t=0):
         self.motor_left.moveFoward(speed-angle)
         self.motor_right.moveForward(speed+angle)
         sleep(t)
