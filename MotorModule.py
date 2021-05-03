@@ -4,7 +4,6 @@ from time import sleep
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-
 class Motor:
     def __init__(self, Ena, In1, In2):
         self.Ena = Ena

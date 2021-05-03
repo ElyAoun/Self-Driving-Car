@@ -2,7 +2,6 @@ import RPi.GPIO as GPIO
 from MotorModule import Motor
 from time import sleep
 
-
 class CarModule:
     def __init__(self, motor_left, motor_right):
         self.motor_left = motor_left
