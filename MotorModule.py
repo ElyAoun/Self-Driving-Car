@@ -18,8 +18,8 @@ class Motor:
     def moveForward(self, speed=50, angle=0):
         if speed > 100:
             speed = 100
-        elif speed < -100:
-            speed = -100
+        elif speed < 0:
+            speed = 0
         self.pwm.ChangeDutyCycle(abs(speed))
         if speed > 0:
             GPIO.output(self.In1, GPIO.HIGH)
@@ -27,6 +27,19 @@ class Motor:
         else:
             GPIO.output(self.In1, GPIO.LOW)
             GPIO.output(self.In2, GPIO.HIGH)
+
+    def moveBackward(self, speed=50, angle=0):
+        if speed > 100:
+            speed = 100
+        elif speed < 0:
+            speed = 0
+        self.pwmA.ChangeDutyCycle(abs(speed))
+        if speed > 0:
+            GPIO.output(self.In1, GPIO.LOW)
+            GPIO.output(self.In2, GPIO.HIGH)
+        else:
+            GPIO.output(self.In1, GPIO.HIGH)
+            GPIO.output(self.In2, GPIO.LOW)
 
     def stop(self):
         GPIO.output(self.In1, GPIO.LOW)
