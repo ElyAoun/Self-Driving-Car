@@ -33,7 +33,7 @@ class Motor:
             speed = 100
         elif speed < 0:
             speed = 0
-        self.pwmA.ChangeDutyCycle(abs(speed))
+        self.pwm.ChangeDutyCycle(abs(speed))
         if speed > 0:
             GPIO.output(self.In1, GPIO.LOW)
             GPIO.output(self.In2, GPIO.HIGH)

@@ -22,10 +22,12 @@ class LaneFollower:
             logging.error("no lines")
             return frame
         new_steering_angle = compute_steering_angle(frame, lane_lines)
-        self.curr_steering_angle = stabilize_steering_angle(self.curr_steering_angle, new_steering_angle,len(lane_lines))
-        print("Steering angle: ",self.curr_steering_angle)
+        self.curr_steering_angle = stabilize_steering_angle(self.curr_steering_angle, new_steering_angle,
+                                                            len(lane_lines))
+
+        print("Steering angle: ", self.curr_steering_angle - 90)
         if self.car is not None:
-            self.car.moveLRForward(angle=self.curr_steering_angle-90)
+            self.car.moveLRForward(angle=self.curr_steering_angle - 90)
         curr_heading_image = display_heading_line(frame, self.curr_steering_angle)
         return curr_heading_image
 
