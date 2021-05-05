@@ -26,7 +26,7 @@ class LaneFollower:
                                                             len(lane_lines))
         print("Steering angle: ", self.curr_steering_angle - 90)
         if self.car is not None:
-            if -10<=self.curr_steering_angle-90<=10:
+            if -30<=self.curr_steering_angle-90<=30:
                 self.car.moveLRForward(speed=60,angle=0)
             else:
                 self.car.moveLRForward(speed=60,angle=self.curr_steering_angle-90)
