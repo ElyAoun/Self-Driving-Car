@@ -14,7 +14,7 @@ import cv2
 
 def test_video(path):
     lane_follower = LaneFollower(None)
-    cap = cv2.VideoCapture(path + '.mp4')
+    cap = cv2.VideoCapture(path)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter('output.avi', fourcc, 30.0, (int(cap.get(3)), int(cap.get(4))))
     try:
@@ -74,4 +74,4 @@ def drive():
 if __name__ == '__main__':
     drive()
 
-#test_video("C:\\Users\\jason\\Downloads\\test4")
+#test_video("raw_feed_1.mp4")
