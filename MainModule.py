@@ -57,8 +57,8 @@ def drive():
     pi_cam = Webcam(camera_resolution_x, camera_resolution_y)
     sleep(0.1)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 30.0,(camera_resolution_x,camera_resolution_y))
-    out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 30.0, (camera_resolution_x,camera_resolution_y))
+    out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 10.0,(camera_resolution_x,camera_resolution_y))
+    out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 10.0, (camera_resolution_x,camera_resolution_y))
     for frame in pi_cam.camera.capture_continuous(pi_cam.rawCapture, format="bgr", use_video_port=True):
         image_lane = frame.array
         out1.write(image_lane)
