@@ -1,12 +1,12 @@
 from LaneDetectionModule import LaneFollower
-
+"""
 from MotorModule import Motor
 from CarModule import CarModule
 from WebcamModule import Webcam
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 import RPi.GPIO as GPIO
-
+"""
 from time import sleep
 
 import cv2
@@ -36,7 +36,7 @@ def test_video(path):
         out.release()
         cv2.destroyAllWindows()
 
-
+"""
 def drive():
     # GPIO pins for motor 1
     in1 = 24
@@ -55,10 +55,10 @@ def drive():
     camera_resolution_x = 640
     camera_resolution_y = 480
     pi_cam = Webcam(camera_resolution_x, camera_resolution_y)
-    sleep(0.1)
+    sleep(2)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 10.0,(camera_resolution_x,camera_resolution_y))
-    out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 10.0, (camera_resolution_x,camera_resolution_y))
+    out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 60.0,(camera_resolution_x,camera_resolution_y))
+    out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 60.0, (camera_resolution_x,camera_resolution_y))
     for frame in pi_cam.camera.capture_continuous(pi_cam.rawCapture, format="bgr", use_video_port=True):
         image_lane = frame.array
         out1.write(image_lane)
@@ -73,6 +73,6 @@ def drive():
 
 if __name__ == '__main__':
     drive()
-
+"""
 #test_video("C:\\Users\\jason\\Downloads\\test4.mp4")
-#test_video("raw_feed_1.mp4")
+test_video("raw_feed_1.avi")
