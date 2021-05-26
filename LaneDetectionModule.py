@@ -27,10 +27,11 @@ class LaneFollower:
         if self.car is not None:
             if -10 <= (self.curr_steering_angle - 90) <= 10:
                 print("Steering angle: 0", )
-                self.car.moveLRForward(speed=60, angle=0)
+                self.car.moveLRForward(speed=30, angle=0,t=1.5)
             else:
-                print("Steering angle: ", self.curr_steering_angle - 90)
-                self.car.moveLRForward(speed=60, angle=self.curr_steering_angle - 90)
+                print("Steering angle: ", self.curr_steering_angle-90)
+                self.car.moveLRForward(speed=30, angle=0,t=1.5)
+            self.car.stopLR()
         curr_heading_image = display_heading_line(frame, self.curr_steering_angle)
         return curr_heading_image
 
@@ -41,7 +42,7 @@ def detect_edges(frame):
     upper_black = np.array([179, 255, 87])  # maximum
     mask = cv2.inRange(hsv_frame, lower_black, upper_black)
     edges = cv2.Canny(mask, 200, 400)
-    cv2.imshow("edge", mask)
+    #cv2.imshow("edge", mask)
     return edges
 
 
@@ -52,6 +53,7 @@ def region_of_interest(edges):
     polygon = np.array([[(0, height * 1 / 2), (width, height * 1 / 2), (width, height), (0, height)]], np.int32)
     cv2.fillPoly(mask, polygon, 255)
     cropped_edges = cv2.bitwise_and(edges, mask)
+    #cv2.imshow('ede',cropped_edges)
     return cropped_edges
 
 

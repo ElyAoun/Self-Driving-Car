@@ -52,21 +52,25 @@ def drive():
     lane_follower = LaneFollower(car)
     camera_resolution_x = 640
     camera_resolution_y = 480
-    pi_cam = Webcam(camera_resolution_x, camera_resolution_y)
+    #pi_cam = Webcam(camera_resolution_x, camera_resolution_y)
     sleep(2)
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 30.0,(camera_resolution_x,camera_resolution_y))
-    out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 30.0, (camera_resolution_x,camera_resolution_y))
-    for frame in pi_cam.camera.capture_continuous(pi_cam.rawCapture, format="bgr", use_video_port=True):
-        image_lane = frame.array
-        out1.write(image_lane)
+    #fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    #out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 30.0,(camera_resolution_x,camera_resolution_y))
+    #out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 30.0, (camera_resolution_x,camera_resolution_y))
+    #for frame in pi_cam.camera.capture_continuous(pi_cam.rawCapture, format="bgr", use_video_port=True):
+    cap=cv2.VideoCapture(0)
+    sleep(2)
+    while True:
+        _,image_lane = cap.read()
         combo_image = lane_follower.follow_lane(image_lane)
-        out2.write(combo_image)
         cv2.imshow("Lane Lines", combo_image)
+        
         key = cv2.waitKey(1) & 0xFF
-        pi_cam.rawCapture.truncate(0)
         if key == ord("q"):
             break
+    cap.release()
+    cv2.destroyAllWindows()
+    car.stopLR()
 if __name__ == '__main__':
     drive()
 

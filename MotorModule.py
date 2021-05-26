@@ -15,19 +15,19 @@ class Motor:
         self.pwm = GPIO.PWM(self.Ena, 100)
         self.pwm.start(0)
 
-    def moveForward(self, speed=30, angle=0):
+    def moveForward(self, speed):
+       
         if speed > 100:
             speed = 100
         elif speed < 0:
             speed = 0
         self.pwm.ChangeDutyCycle(abs(speed))
         if speed > 0:
-            GPIO.output(self.In1, GPIO.HIGH)
-            GPIO.output(self.In2, GPIO.LOW)
-        else:
             GPIO.output(self.In1, GPIO.LOW)
             GPIO.output(self.In2, GPIO.HIGH)
-
+        else:
+            GPIO.output(self.In1, GPIO.HIGH)
+            GPIO.output(self.In2, GPIO.LOW)
     def moveBackward(self, speed=30, angle=0):
         if speed > 100:
             speed = 100
