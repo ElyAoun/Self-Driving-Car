@@ -9,8 +9,8 @@ class CarModule:
         self.motor_right = motor_right
 
     def moveLRForward(self, speed=30, angle=0, t=0):
-        self.motor_left.moveForward(speed + angle)
-        self.motor_right.moveForward(speed - angle)
+        self.motor_left.moveForward(speed - angle)
+        self.motor_right.moveForward(speed + angle)
         sleep(t)
 
     def moveLRBackward(self, speed=30, angle=0, t=0):

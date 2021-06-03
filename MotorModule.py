@@ -35,11 +35,11 @@ class Motor:
             speed = 0
         self.pwm.ChangeDutyCycle(abs(speed))
         if speed > 0:
-            GPIO.output(self.In1, GPIO.LOW)
-            GPIO.output(self.In2, GPIO.HIGH)
-        else:
             GPIO.output(self.In1, GPIO.HIGH)
             GPIO.output(self.In2, GPIO.LOW)
+        else:
+            GPIO.output(self.In1, GPIO.LOW)
+            GPIO.output(self.In2, GPIO.HIGH)
 
     def stop(self):
         self.pwm.ChangeDutyCycle(0)

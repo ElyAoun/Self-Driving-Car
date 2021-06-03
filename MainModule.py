@@ -6,10 +6,10 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import RPi.GPIO as GPIO
 from time import sleep
-
+import ClassificationModule
 import cv2
 
-
+detect=0
 def test_video(path):
     lane_follower = LaneFollower(None)
     cap = cv2.VideoCapture(path)
@@ -50,21 +50,18 @@ def drive():
     motor2 = Motor(en2, in3, in4)
     car = CarModule(motor1, motor2)
     lane_follower = LaneFollower(car)
-    camera_resolution_x = 640
-    camera_resolution_y = 480
-    #pi_cam = Webcam(camera_resolution_x, camera_resolution_y)
-    sleep(2)
-    #fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    #out1 = cv2.VideoWriter('raw_feed_1.avi', fourcc, 30.0,(camera_resolution_x,camera_resolution_y))
-    #out2 = cv2.VideoWriter('lanes_feed_1.avi', fourcc, 30.0, (camera_resolution_x,camera_resolution_y))
-    #for frame in pi_cam.camera.capture_continuous(pi_cam.rawCapture, format="bgr", use_video_port=True):
     cap=cv2.VideoCapture(0)
     sleep(2)
+    stop=False
     while True:
         _,image_lane = cap.read()
-        combo_image = lane_follower.follow_lane(image_lane)
+        if detect==1:
+            sign=ClassificationModule.classify(image_lane)
+            if sign is not None and sign=='stop sign':
+                stop=True
+        combo_image = lane_follower.follow_lane(image_lane,stop)
+        stop=False
         cv2.imshow("Lane Lines", combo_image)
-        
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
