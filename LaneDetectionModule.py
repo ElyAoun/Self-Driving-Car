@@ -11,12 +11,12 @@ class LaneFollower:
         self.car = car
         self.curr_steering_angle = 90
 
-    def follow_lane(self, frame,stop):
+    def follow_lane(self, frame, stop):
         lane_lines, frame = detect_lane(frame)
-        final_frame = self.steer(frame, lane_lines,stop)
+        final_frame = self.steer(frame, lane_lines, stop)
         return final_frame
 
-    def steer(self, frame, lane_lines,stop):
+    def steer(self, frame, lane_lines, stop):
         logging.debug("Steering")
         if len(lane_lines) == 0:
             logging.error("no lines")
@@ -28,10 +28,10 @@ class LaneFollower:
             if stop is False:
                 if -10 <= (self.curr_steering_angle - 90) <= 10:
                     print("Steering angle: 0", )
-                    self.car.moveLRForward(speed=40, angle=0,t=1.5)
+                    self.car.moveLRForward(speed=40, angle=0, t=1.5)
                 else:
-                    print("Steering angle: ", self.curr_steering_angle-90)
-                    self.car.moveLRForward(speed=40, angle=0,t=1.5)
+                    print("Steering angle: ", self.curr_steering_angle - 90)
+                    self.car.moveLRForward(speed=40, angle=0, t=1.5)
                 self.car.stopLR()
             else:
                 self.car.stopLR()
@@ -41,11 +41,14 @@ class LaneFollower:
 
 def detect_edges(frame):
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)  # convert the frame into hsv space(hue saturation value)
+    cv2.imwrite("hsv_images\\hsv_frame{}.png".format(random.randint(0, 1000)), hsv_frame)
     lower_black = np.array([0, 0, 0])  # minimum hue saturation value
     upper_black = np.array([179, 255, 87])  # maximum
     mask = cv2.inRange(hsv_frame, lower_black, upper_black)
     edges = cv2.Canny(mask, 200, 400)
-    #cv2.imshow("edge", mask)
+    cv2.imshow("edge", mask)
+    cv2.imwrite("masks\\mask{}.png".format(random.randint(0, 1000)), mask)
+    cv2.imwrite("edges\\edges{}.png".format(random.randint(0, 1000)), edges)
     return edges
 
 
@@ -56,7 +59,7 @@ def region_of_interest(edges):
     polygon = np.array([[(0, height * 1 / 2), (width, height * 1 / 2), (width, height), (0, height)]], np.int32)
     cv2.fillPoly(mask, polygon, 255)
     cropped_edges = cv2.bitwise_and(edges, mask)
-    #cv2.imshow('ede',cropped_edges)
+    # cv2.imshow('ede',cropped_edges)
     return cropped_edges
 
 

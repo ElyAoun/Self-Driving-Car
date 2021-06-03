@@ -1,10 +1,9 @@
+
 from LaneDetectionModule import LaneFollower
-from MotorModule import Motor
-from CarModule import CarModule
+#from MotorModule import Motor
+#from CarModule import CarModule
 from WebcamModule import Webcam
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 from time import sleep
 import ClassificationModule
 import cv2
@@ -15,15 +14,22 @@ def test_video(path):
     cap = cv2.VideoCapture(path)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter('output.avi', fourcc, 30.0, (int(cap.get(3)), int(cap.get(4))))
+    stop=False
     try:
         i = 0
         while cap.isOpened():
             _, frame = cap.read()
-            print('frame {}'.format(i))
+            cv2.imwrite("frames\\frame_{}.png".format(i),frame)
             if frame is not None:
-                combo_image = lane_follower.follow_lane(frame)
+                if detect == 1:
+                    sign = ClassificationModule.classify(frame)
+                    if sign is not None and sign == 'stop sign':
+                        stop = True
+                combo_image = lane_follower.follow_lane(frame,stop)
+                stop=False
                 out.write(combo_image)
                 cv2.imshow("Road with Lane line", combo_image)
+                cv2.imwrite("lines\\img_{}.png".format(i),combo_image)
                 i += 1
             else:
                 break
@@ -34,7 +40,7 @@ def test_video(path):
         out.release()
         cv2.destroyAllWindows()
 
-
+"""
 def drive():
     # GPIO pins for motor 1
     in1 = 24
@@ -70,6 +76,6 @@ def drive():
     car.stopLR()
 if __name__ == '__main__':
     drive()
-
-#test_video("C:\\Users\\jason\\Downloads\\test4.mp4")
+"""
+test_video("in1.mp4")
 #test_video("raw_feed.avi")
