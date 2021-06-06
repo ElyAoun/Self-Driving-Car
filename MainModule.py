@@ -11,9 +11,9 @@ import cv2
 detect=0
 def test_video(path):
     lane_follower = LaneFollower(None)
-    cap = cv2.VideoCapture(path)
+    cap = Webcam(path)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('output.avi', fourcc, 30.0, (int(cap.get(3)), int(cap.get(4))))
+    out = cv2.VideoWriter('output.avi', fourcc, 30.0, (int(cap.getCap().get(3)), int(cap.getCap().get(4))))
     stop=False
     try:
         i = 0

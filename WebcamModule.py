@@ -1,7 +1,15 @@
 import cv2
+
+
 class Webcam():
-    def __init__(self, screenWidth=320, screenHeight=240):
-        self.camera = PiCamera()
-        self.camera.resolution = (screenWidth, screenHeight)
-        self.camera.framerate = 30
-        self.rawCapture = PiRGBArray(self.camera, size=(640, 480))
+
+    def __init__(self, path):
+        self.capture = cv2.VideoCapture(path)
+    def read(self):
+        return self.capture.read()
+    def isOpened(self):
+        return self.capture.isOpened()
+    def release(self):
+        self.capture.release()
+    def getCap(self):
+        return self.capture

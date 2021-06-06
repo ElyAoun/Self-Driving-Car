@@ -56,17 +56,22 @@ def region_of_interest(edges):
     height, width = edges.shape
     mask = np.zeros_like(edges)
     # focus only on the bottom
-    polygon = np.array([[(0, height * 1 / 2), (width, height * 1 / 2), (width, height), (0, height)]], np.int32)
+    polygon = np.array([[
+        (0, height * 1 / 3),
+        (width, height * 1 / 3),
+        (width, height),
+        (0, height)]],
+        np.int32)
     cv2.fillPoly(mask, polygon, 255)
     cropped_edges = cv2.bitwise_and(edges, mask)
-    # cv2.imshow('ede',cropped_edges)
+    cv2.imshow('ede',cropped_edges)
     return cropped_edges
 
 
 def detect_line_segments(cropped_edge):
-    rho = 1
-    angle = np.pi / 180
-    min_threshold = 10
+    rho = 1 #the distance precision in pixel
+    angle = np.pi / 180 #angular precision in radian
+    min_threshold = 10  #number of votes needed to be considered a line segment
     line_segment = cv2.HoughLinesP(cropped_edge, rho, angle, min_threshold, np.array([]), minLineLength=8,
                                    maxLineGap=4)
     return line_segment
@@ -134,13 +139,14 @@ def detect_lane(frame):
     return lane_lines, lane_lines_img
 
 
-def display_lines(frame, lines, line_color=(0, 255, 0), line_width=5):
+def display_lines(frame, lines, line_color=(0, 255, 0), line_width=12):
     line_image = np.zeros_like(frame)
     if lines is not None:
         for line in lines:
             for x1, y1, x2, y2 in line:
                 cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
     line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
+    cv2.imwrite("lines_plot\\line_plt{}.png".format(random.randint(0,1000)),line_image)
     return line_image
 
 
@@ -168,7 +174,7 @@ def display_heading_line(frame, steering_angle, line_color=(0, 0, 255), line_wid
 
 
 def compute_steering_angle(frame, lane_lines):
-    """ Find the steering angle based on lane line coordinate
+    """  Find the steering angle based on lane line coordinate
         We assume that camera is calibrated to point to dead center
     """
     if len(lane_lines) == 0:  # no lane line shown on camera
@@ -181,7 +187,7 @@ def compute_steering_angle(frame, lane_lines):
     else:  # two lane lines shown on camera
         _, _, left_x2, _ = lane_lines[0][0]
         _, _, right_x2, _ = lane_lines[1][0]
-        camera_mid_offset_percent = 0.01  # 0.0 means car pointing to center, -0.03: car is centered to left, +0.03 means car pointing to right
+        camera_mid_offset_percent = 0  # 0.0 means car pointing to center, -0.03: car is centered to left, +0.03 means car pointing to right
         mid = int(width / 2 * (1 + camera_mid_offset_percent))
         x_offset = (left_x2 + right_x2) / 2 - mid
 
@@ -190,6 +196,7 @@ def compute_steering_angle(frame, lane_lines):
 
     angle_to_mid_radian = math.atan(x_offset / y_offset)  # angle (in radian) to center vertical line
     angle_to_mid_deg = int(angle_to_mid_radian * 180.0 / math.pi)  # angle (in degrees) to center vertical line
+    print(angle_to_mid_deg)
     steering_angle = angle_to_mid_deg + 90  # this is the steering angle needed by picar front wheel
 
     logging.debug('new steering angle: %s' % steering_angle)
