@@ -40,12 +40,17 @@ def findObjects(outputs, image):
                 bbox.append([x,y,w,h])
                 classIds.append(classId)
                 confs.append(float(confidence))
+    print(len(bbox))
     indices = cv2.dnn.NMSBoxes(bbox, confs, confThreshold, nmsThreshold)  # it will tell us which bounding boxes to keep by giving their indices
 
     for i in indices:
         i = i[0]  # take the first element
-        return classNames[classIds[i]]
-
+        box = bbox[i]
+        x, y, w, h = box[0], box[1], box[2], box[3]
+        cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 255), 2)
+        cv2.putText(image, f'{classNames[classIds[i]].upper()} {int(confs[i]*100)}%',
+                    (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 255), 2)
+        return classNames[classIds[i]],image
 def classify(frame):
 
     blob = cv2.dnn.blobFromImage(frame, 1/255, (whT, whT), [0, 0, 0], 1, crop=False)  # convert image to blob

@@ -1,8 +1,11 @@
 
 from LaneDetectionModule import LaneFollower
+#uncomment on pi
 #from MotorModule import Motor
+#uncomment on pi
 #from CarModule import CarModule
 from WebcamModule import Webcam
+#uncomment on pi
 #import RPi.GPIO as GPIO
 from time import sleep
 import ClassificationModule
@@ -19,17 +22,19 @@ def test_video(path):
         i = 0
         while cap.isOpened():
             _, frame = cap.read()
-            cv2.imwrite("frames\\frame_{}.png".format(i),frame)
+            #cv2.imwrite("frames\\frame_{}.png".format(i),frame)
             if frame is not None:
                 if detect == 1:
-                    sign = ClassificationModule.classify(frame)
+                    sign,img_class = ClassificationModule.classify(frame)
                     if sign is not None and sign == 'stop sign':
                         stop = True
+                    cv2.imwrite("classifications\\img_{}.png".format(i), img_class)
                 combo_image = lane_follower.follow_lane(frame,stop)
                 stop=False
                 out.write(combo_image)
-                cv2.imshow("Road with Lane line", combo_image)
-                cv2.imwrite("lines\\img_{}.png".format(i),combo_image)
+                #cv2.imshow("Road with Lane line", combo_image)
+                #cv2.imwrite("lines\\img_{}.png".format(i),combo_image)
+
                 i += 1
             else:
                 break
@@ -39,7 +44,7 @@ def test_video(path):
         cap.release()
         out.release()
         cv2.destroyAllWindows()
-
+#for pi use
 """
 def drive():
     # GPIO pins for motor 1

@@ -7,7 +7,6 @@ import logging
 
 class LaneFollower:
     def __init__(self, car):
-        logging.info("Create Lane Follower with car")
         self.car = car
         self.curr_steering_angle = 90
 
@@ -17,9 +16,7 @@ class LaneFollower:
         return final_frame
 
     def steer(self, frame, lane_lines, stop):
-        logging.debug("Steering")
         if len(lane_lines) == 0:
-            logging.error("no lines")
             return frame
         new_steering_angle = compute_steering_angle(frame, lane_lines)
         self.curr_steering_angle = stabilize_steering_angle(self.curr_steering_angle, new_steering_angle,
@@ -31,7 +28,7 @@ class LaneFollower:
                     self.car.moveLRForward(speed=40, angle=0, t=1.5)
                 else:
                     print("Steering angle: ", self.curr_steering_angle - 90)
-                    self.car.moveLRForward(speed=40, angle=0, t=1.5)
+                    self.car.moveLRForward(speed=40, angle=self.curr_steering_angle - 90, t=1.5)
                 self.car.stopLR()
             else:
                 self.car.stopLR()
@@ -41,14 +38,12 @@ class LaneFollower:
 
 def detect_edges(frame):
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)  # convert the frame into hsv space(hue saturation value)
-    cv2.imwrite("hsv_images\\hsv_frame{}.png".format(random.randint(0, 1000)), hsv_frame)
+    #cv2.imwrite("hsv_images\\hsv_frame{}.png".format(random.randint(0, 1000)), hsv_frame)
     lower_black = np.array([0, 0, 0])  # minimum hue saturation value
     upper_black = np.array([179, 255, 87])  # maximum
     mask = cv2.inRange(hsv_frame, lower_black, upper_black)
     edges = cv2.Canny(mask, 200, 400)
     cv2.imshow("edge", mask)
-    cv2.imwrite("masks\\mask{}.png".format(random.randint(0, 1000)), mask)
-    cv2.imwrite("edges\\edges{}.png".format(random.randint(0, 1000)), edges)
     return edges
 
 
@@ -146,7 +141,6 @@ def display_lines(frame, lines, line_color=(0, 255, 0), line_width=12):
             for x1, y1, x2, y2 in line:
                 cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
     line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
-    cv2.imwrite("lines_plot\\line_plt{}.png".format(random.randint(0,1000)),line_image)
     return line_image
 
 
@@ -223,5 +217,4 @@ def stabilize_steering_angle(curr_steering_angle, new_steering_angle, num_of_lan
                                         + max_angle_deviation * angle_deviation / abs(angle_deviation))
     else:
         stabilized_steering_angle = new_steering_angle
-    logging.info('Proposed angle: %s, stabilized angle: %s' % (new_steering_angle, stabilized_steering_angle))
     return stabilized_steering_angle
